@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ummah Tech Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="icon" href="https://i.ibb.co/LWZmJwW/Whats-App-Image-2026-02-05-at-11-06-52-PM.jpg" type="image/png">
+<link rel="icon" href="https://i.ibb.co/LWZmJwW/Whats-App-Image-2026-02-05-at-11-06-52-PM.jpg" type="image/png">
 
 <style>
 :root {
@@ -101,6 +101,27 @@ fieldset { border: 1px solid #2e8b57; border-radius: 10px; padding: 15px; margin
 legend { font-weight: bold; color: var(--primary-color); }
 
 .logo { width: 150px; margin-bottom: 20px; }
+
+.deleteBtn{
+  background:red;
+  color:white;
+  border:none;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  margin-right:8px;
+}
+
+.updateBtn{
+  background:green;
+  color:white;
+  border:none;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+
 </style>
 </head>
 <body>
@@ -147,7 +168,7 @@ legend { font-weight: bold; color: var(--primary-color); }
       <input type="email" name="email" placeholder="Email" required>
 
       <label>Phone Number</label>
-      <input type="tel" name="phone" placeholder="+254700123456" required>
+      <input type="tel" name="phone" placeholder="700123456" required>
 
       <label>Admission Number</label>
       <input type="text" name="admissionNumber" placeholder="BSCS/2026/1234" required>
@@ -211,14 +232,17 @@ legend { font-weight: bold; color: var(--primary-color); }
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-app.js";
-import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
-import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
+import { 
+  getFirestore, collection, addDoc, onSnapshot, 
+  deleteDoc, doc, updateDoc 
+} from "https://www.gstatic.com/firebasejs/12.9.0/firebase-firestore.js";
+
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
 // Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyCQwsZ2i_Xe8g0UigrlWdqWmu1x4qncbF4",
   authDomain: "registration-form-6ce12.firebaseapp.com",
-  databaseURL: "https://registration-form-6ce12-default-rtdb.firebaseio.com",
   projectId: "registration-form-6ce12",
   storageBucket: "registration-form-6ce12.appspot.com",
   messagingSenderId: "746410556823",
@@ -226,9 +250,10 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
+const db = getFirestore(app);
 const auth = getAuth(app);
 
+// Admin UID
 const ADMIN_UID = "UzLRdzsU7kUy9VPxX6c4VOIW2vn1";
 
 // Pages
@@ -240,7 +265,6 @@ const adminPage = document.getElementById('adminPage');
 // Landing -> Consent -> Registration
 const consentCheck = document.getElementById('consentCheck');
 const consentBtn = document.getElementById('consentBtn');
-consentBtn.disabled = true;
 
 consentCheck.addEventListener('change', () => {
   consentBtn.disabled = !consentCheck.checked;
@@ -261,8 +285,8 @@ document.getElementById('registrationForm').addEventListener('submit', async (e)
   e.preventDefault();
   const f = e.target;
 
-  if(!/^\+254\d{9}$/.test(f.phone.value)){
-    alert("Phone number must start with +254 and have 12 digits.");
+  if(!/^\d{7,15}$/.test(f.phone.value)){
+    alert("Phone number must be digits only, 7-15 characters.");
     f.phone.focus();
     return;
   }
@@ -281,15 +305,19 @@ document.getElementById('registrationForm').addEventListener('submit', async (e)
     role: f.role.value,
     languages: Array.from(f.languages.selectedOptions).map(o => o.value),
     specialization: Array.from(f.specialization).filter(s => s.checked).map(s => s.value),
-    skillsToGain: f.skillsToGain.value,
-    attendance: f.attendance.value,
+    skillsToGain: f.skillsToGain.value || "",
+    attendance: f.attendance.value || 0,
     submittedAt: new Date().toISOString()
   };
 
-  const newRegRef = push(ref(db, "registrations"));
-  await set(newRegRef, data);
-  alert("Registration successful!");
-  f.reset();
+  try {
+    await addDoc(collection(db, "registrations"), data);
+    alert("Registration successful!");
+    f.reset();
+  } catch(err) {
+    console.error("Error adding registration:", err);
+    alert("Failed to register. Try again.");
+  }
 });
 
 // Footer 4 clicks -> Admin Page
@@ -308,6 +336,7 @@ document.getElementById('footer').addEventListener('click', () => {
 document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const f = e.target;
+
   try {
     const userCredential = await signInWithEmailAndPassword(auth, f.adminEmail.value, f.adminPassword.value);
     const user = userCredential.user;
@@ -323,36 +352,77 @@ document.getElementById('adminLoginForm').addEventListener('submit', async (e) =
     adminContent.classList.remove('hidden');
 
     const list = document.getElementById('registrationsList');
-    onValue(ref(db, "registrations"), (snapshot) => {
-      const data = snapshot.val();
+
+    // Safe snapshot listener
+    onSnapshot(collection(db, "registrations"), (snapshot) => {
       list.innerHTML = "";
-      if(!data){
+
+      if(snapshot.empty){
         list.innerHTML = "<p>No registrations found.</p>";
         return;
       }
-      Object.values(data).forEach(d => {
+
+      snapshot.forEach(docSnap => {
+        const d = docSnap.data();
+        const id = docSnap.id;
+
+        const languages = Array.isArray(d.languages) ? d.languages : [];
+        const specialization = Array.isArray(d.specialization) ? d.specialization : [];
+        const skillsToGain = d.skillsToGain || "";
+        const attendance = d.attendance || 0;
+
         const div = document.createElement('div');
         div.style.border = "1px solid #2e8b57";
         div.style.padding = "10px";
         div.style.margin = "8px 0";
         div.style.borderRadius = "8px";
-        div.innerHTML = `<strong>${d.fullName}</strong> (${d.email})<br>
-                         Admission: ${d.admissionNumber}<br>
-                         Role: ${d.role}<br>
-                         Languages: ${d.languages.join(", ")}<br>
-                         Specialization: ${d.specialization.join(", ")}<br>
-                         Skills to gain: ${d.skillsToGain}<br>
-                         Attendance: ${d.attendance}%`;
-        list.appendChild(div);
-      });
-    });
 
+        div.innerHTML = `
+          <strong>${d.fullName}</strong><br>
+          Email: ${d.email}<br>
+          Phone: ${d.phone}<br>
+          Admission: ${d.admissionNumber}<br>
+          Role: ${d.role}<br>
+          Languages: ${languages.join(", ")}<br>
+          Specialization: ${specialization.join(", ")}<br>
+          Skills to Gain: ${skillsToGain}<br>
+          Attendance: ${attendance}%<br><br>
+
+          <button class="deleteBtn">Delete</button>
+          <button class="updateBtn">Update</button>
+        `;
+
+        // Delete Button
+        div.querySelector(".deleteBtn").onclick = async () => {
+          if(confirm("Delete this student?")){
+            await deleteDoc(doc(db, "registrations", id));
+            alert("Deleted!");
+          }
+        };
+
+        // Update Button
+        div.querySelector(".updateBtn").onclick = async () => {
+          const newAttendance = prompt("Enter new attendance %:", attendance);
+          if(newAttendance !== null){
+            await updateDoc(doc(db, "registrations", id), {
+              attendance: newAttendance
+            });
+            alert("Updated!");
+          }
+        };
+
+        list.appendChild(div);
+      }); // end snapshot.forEach
+    }); // end onSnapshot
   } catch(err){
     console.error(err);
     alert("Invalid admin credentials!");
   }
-});
-</script>
+}); // end adminLoginForm
 
+   
+
+
+</script>
 </body>
 </html>
