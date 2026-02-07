@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ummah Tech Hub</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-<link rel="icon" href="https://i.ibb.co/LWZmJwW/Whats-App-Image-2026-02-05-at-11-06-52-PM.jpg" type="image/png">
+  <link rel="icon" href="https://i.ibb.co/LWZmJwW/Whats-App-Image-2026-02-05-at-11-06-52-PM.jpg" type="image/png">
 
 <style>
 :root {
@@ -23,28 +23,72 @@ body {
   padding: 0;
 }
 
-.page { display: none; text-align: center; padding: 50px 20px; }
+.page {
+  display: none;
+  text-align: center;
+  padding: 50px 20px;
+}
+
 .page.active { display: block; }
 
 h1 { font-size: 2.5rem; color: var(--primary-color); margin-bottom: 20px; }
 p { margin-bottom: 30px; line-height: 1.6; }
 
-form { display: flex; flex-direction: column; max-width: 500px; margin: 0 auto; text-align: left; background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-label { margin-top: 12px; font-weight: 500; }
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: left;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+label {
+  margin-top: 12px;
+  font-weight: 500;
+}
 
 input, textarea, select {
-  width: 100%; padding: 10px; margin-top: 5px; border-radius: 8px; border: 1px solid #ccc; background: #fff; color: #333; outline: none; box-shadow: 0 0 8px var(--input-glow); transition: 0.3s;
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #333;
+  outline: none;
+  box-shadow: 0 0 8px var(--input-glow);
+  transition: 0.3s;
 }
+
 input:focus, textarea:focus, select:focus {
   box-shadow: 0 0 15px var(--primary-color);
   border: 1px solid var(--primary-color);
 }
-input[type="checkbox"], input[type="radio"] { width: auto; margin-right: 10px; }
+
+input[type="checkbox"], input[type="radio"] {
+  width: auto;
+  margin-right: 10px;
+}
+
 textarea { resize: vertical; }
 
 button.btn-glow {
-  background: linear-gradient(45deg, #2e8b57, #3cb371); color: #fff; padding: 12px 25px; border: none; border-radius: 12px; font-size: 1.1rem; cursor: pointer; box-shadow: 0 0 15px var(--input-glow); margin-top: 20px; transition: 0.3s;
+  background: linear-gradient(45deg, #2e8b57, #3cb371);
+  color: #fff;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 0 15px var(--input-glow);
+  margin-top: 20px;
+  transition: 0.3s;
 }
+
 button.btn-glow:hover { box-shadow: 0 0 25px var(--primary-color); transform: translateY(-3px); }
 
 footer { text-align: center; padding: 15px; margin-top: 40px; background: var(--primary-color); color: #fff; font-weight: bold; cursor: pointer; }
@@ -65,7 +109,15 @@ legend { font-weight: bold; color: var(--primary-color); }
 <div id="landing" class="page active">
   <img src="https://i.ibb.co/LWZmJwW/Whats-App-Image-2026-02-05-at-11-06-52-PM.jpg" alt="Tech Logo" class="logo">
   <h1>Welcome to Ummah Tech Hub</h1>
-  <p>Join, learn, and grow in tech at Ummah University!</p>
+  <p>
+    Ummah Tech Hub is your gateway to mastering cutting-edge technologies, gaining practical skills,
+    and connecting with fellow Ummah University students passionate about technology.
+    <br><br>
+    Explore frontend, backend, app & web development, databases, networking, software engineering, and AI/ML.
+    Build your portfolio, collaborate, and be part of the tech revolution at Ummah University!
+    <br><br>
+    Join us now to expand your skills, grow professionally, and make an impact in the tech community.
+  </p>
   <button id="startBtn" class="btn-glow">Register Now</button>
 </div>
 
@@ -73,8 +125,8 @@ legend { font-weight: bold; color: var(--primary-color); }
 <div id="consentModal" class="modal">
   <div class="modal-content">
     <h2>Consent Form</h2>
-    <p>Please agree to participate in Ummah Tech Hub programs. Your data will be securely stored.</p>
-    <label><input type="checkbox" id="consentCheck"> I agree to terms.</label>
+    <p>Before you register, please agree to participate in Ummah Tech Hub programs and events. Your data will be stored securely.</p>
+    <label><input type="checkbox" id="consentCheck"> I agree to the terms and conditions.</label>
     <button id="consentBtn" class="btn-glow" disabled>Continue</button>
   </div>
 </div>
@@ -82,15 +134,23 @@ legend { font-weight: bold; color: var(--primary-color); }
 <!-- Registration Form Page -->
 <div id="registrationPage" class="page">
   <img src="https://i.ibb.co/LWZmJwW/Whats-App-Image-2026-02-05-at-11-06-52-PM.jpg" alt="Tech Logo" class="logo">
-  <h1>Registration</h1>
+  <h1>Ummah Tech Hub Registration</h1>
 
   <form id="registrationForm">
+
     <fieldset>
-      <legend>Personal Info</legend>
-      <label>Full Name</label><input type="text" name="fullName" required>
-      <label>Email</label><input type="email" name="email" required>
-      <label>Phone Number</label><input type="tel" name="phone" placeholder="+254700123456" required>
-      <label>Admission Number</label><input type="text" name="admissionNumber" placeholder="BSCS/2026/1234" required>
+      <legend>Personal Information</legend>
+      <label>Full Name</label>
+      <input type="text" name="fullName" placeholder="Full Name" required>
+
+      <label>Email</label>
+      <input type="email" name="email" placeholder="Email" required>
+
+      <label>Phone Number</label>
+      <input type="tel" name="phone" placeholder="+254700123456" required>
+
+      <label>Admission Number</label>
+      <input type="text" name="admissionNumber" placeholder="BSCS/2026/1234" required>
     </fieldset>
 
     <fieldset>
@@ -101,7 +161,7 @@ legend { font-weight: bold; color: var(--primary-color); }
     </fieldset>
 
     <fieldset>
-      <legend>Languages / Tools</legend>
+      <legend>Languages / Tools You Know</legend>
       <select name="languages" multiple size="5" required>
         <option value="HTML">HTML</option>
         <option value="CSS">CSS</option>
@@ -121,12 +181,12 @@ legend { font-weight: bold; color: var(--primary-color); }
 
     <fieldset>
       <legend>Skills to Gain</legend>
-      <textarea name="skillsToGain" rows="4"></textarea>
+      <textarea name="skillsToGain" rows="4" placeholder="e.g., Web Development, App Development, Database Management"></textarea>
     </fieldset>
 
     <fieldset>
-      <legend>Attendance (%)</legend>
-      <input type="number" name="attendance" min="0" max="100" required>
+      <legend>Attendance participation(%)</legend>
+      <input type="number" name="attendance" min="0" max="100" placeholder="e.g., 85" required>
     </fieldset>
 
     <button type="submit" class="btn-glow">Submit Registration</button>
@@ -154,6 +214,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.9.0/firebas
 import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-database.js";
 import { getAuth, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/12.9.0/firebase-auth.js";
 
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyCQwsZ2i_Xe8g0UigrlWdqWmu1x4qncbF4",
   authDomain: "registration-form-6ce12.firebaseapp.com",
@@ -176,24 +237,41 @@ const consentModal = document.getElementById('consentModal');
 const registrationPage = document.getElementById('registrationPage');
 const adminPage = document.getElementById('adminPage');
 
-// Consent
+// Landing -> Consent -> Registration
 const consentCheck = document.getElementById('consentCheck');
 const consentBtn = document.getElementById('consentBtn');
-consentCheck.addEventListener('change', () => consentBtn.disabled = !consentCheck.checked);
-document.getElementById('startBtn').addEventListener('click', () => consentModal.style.display = 'flex');
+consentBtn.disabled = true;
+
+consentCheck.addEventListener('change', () => {
+  consentBtn.disabled = !consentCheck.checked;
+});
+
+document.getElementById('startBtn').addEventListener('click', () => {
+  consentModal.style.display = 'flex';
+});
+
 consentBtn.addEventListener('click', () => {
   consentModal.style.display = 'none';
   landing.classList.remove('active');
   registrationPage.classList.add('active');
 });
 
-// Registration Submit
-document.getElementById('registrationForm').addEventListener('submit', async e => {
+// Registration Form Submit
+document.getElementById('registrationForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const f = e.target;
 
-  if(!/^\+254\d{9}$/.test(f.phone.value)) { alert("Phone must start +254"); f.phone.focus(); return; }
-  if(!/^BSCS\/\d{4}\/\d+$/.test(f.admissionNumber.value)) { alert("Admission format BSCS/YEAR/NUMBER"); f.admissionNumber.focus(); return; }
+  if(!/^\+254\d{9}$/.test(f.phone.value)){
+    alert("Phone number must start with +254 and have 12 digits.");
+    f.phone.focus();
+    return;
+  }
+
+  if(!/^BSCS\/\d{4}\/\d+$/.test(f.admissionNumber.value)){
+    alert("Admission must be in format BSCS/YEAR/NUMBER");
+    f.admissionNumber.focus();
+    return;
+  }
 
   const data = {
     fullName: f.fullName.value,
@@ -214,7 +292,7 @@ document.getElementById('registrationForm').addEventListener('submit', async e =
   f.reset();
 });
 
-// Footer 4 clicks -> Admin
+// Footer 4 clicks -> Admin Page
 let clickCount = 0;
 document.getElementById('footer').addEventListener('click', () => {
   clickCount++;
@@ -227,26 +305,37 @@ document.getElementById('footer').addEventListener('click', () => {
 });
 
 // Admin Login
-document.getElementById('adminLoginForm').addEventListener('submit', async e => {
+document.getElementById('adminLoginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const f = e.target;
   try {
     const userCredential = await signInWithEmailAndPassword(auth, f.adminEmail.value, f.adminPassword.value);
     const user = userCredential.user;
-    if(user.uid !== ADMIN_UID) { alert("Not authorized!"); await signOut(auth); return; }
+
+    if(user.uid !== ADMIN_UID){
+      alert("You are not authorized as admin!");
+      await signOut(auth);
+      return;
+    }
 
     f.classList.add('hidden');
-    document.getElementById('adminContent').classList.remove('hidden');
+    const adminContent = document.getElementById('adminContent');
+    adminContent.classList.remove('hidden');
 
     const list = document.getElementById('registrationsList');
-    onValue(ref(db, "registrations"), snapshot => {
+    onValue(ref(db, "registrations"), (snapshot) => {
       const data = snapshot.val();
       list.innerHTML = "";
-      if(!data){ list.innerHTML = "<p>No registrations found.</p>"; return; }
+      if(!data){
+        list.innerHTML = "<p>No registrations found.</p>";
+        return;
+      }
       Object.values(data).forEach(d => {
         const div = document.createElement('div');
         div.style.border = "1px solid #2e8b57";
-        div.style.padding = "10px"; div.style.margin = "8px 0"; div.style.borderRadius = "8px";
+        div.style.padding = "10px";
+        div.style.margin = "8px 0";
+        div.style.borderRadius = "8px";
         div.innerHTML = `<strong>${d.fullName}</strong> (${d.email})<br>
                          Admission: ${d.admissionNumber}<br>
                          Role: ${d.role}<br>
@@ -257,7 +346,8 @@ document.getElementById('adminLoginForm').addEventListener('submit', async e => 
         list.appendChild(div);
       });
     });
-  } catch(err) {
+
+  } catch(err){
     console.error(err);
     alert("Invalid admin credentials!");
   }
