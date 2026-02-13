@@ -291,11 +291,11 @@ document.getElementById('registrationForm').addEventListener('submit', async (e)
     return;
   }
 
-  if(!/^BSCS\/\d{4}\/\d+$/.test(f.admissionNumber.value)){
-    alert("Admission must be in format BSCS/YEAR/NUMBER");
+ if(!/^[A-Za-z0-9\/\-]+$/.test(f.admissionNumber.value)){
+    alert("Please enter a valid admission number.");
     f.admissionNumber.focus();
     return;
-  }
+}
 
   const data = {
     fullName: f.fullName.value,
